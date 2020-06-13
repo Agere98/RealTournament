@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20200613180944_CustomUserData.cs" />
-    <Compile Remove="Data\Migrations\20200613180944_CustomUserData.Designer.cs" />
-    <Compile Remove="Data\Migrations\20200613181311_CustomUserData.cs" />
-    <Compile Remove="Data\Migrations\20200613181311_CustomUserData.Designer.cs" />
+    <Compile Remove="Areas\Identity\Data\Migrations\20200613180944_CustomUserData.cs" />
+    <Compile Remove="Areas\Identity\Data\Migrations\20200613180944_CustomUserData.Designer.cs" />
+    <Compile Remove="Areas\Identity\Data\Migrations\20200613181311_CustomUserData.cs" />
+    <Compile Remove="Areas\Identity\Data\Migrations\20200613181311_CustomUserData.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
