@@ -10,6 +10,10 @@
     <Compile Remove="Areas\Identity\Data\Migrations\20200613180944_CustomUserData.Designer.cs" />
     <Compile Remove="Areas\Identity\Data\Migrations\20200613181311_CustomUserData.cs" />
     <Compile Remove="Areas\Identity\Data\Migrations\20200613181311_CustomUserData.Designer.cs" />
+    <Compile Remove="Migrations\20200614102215_CreateDataSchema.cs" />
+    <Compile Remove="Migrations\20200614102215_CreateDataSchema.Designer.cs" />
+    <Compile Remove="Migrations\20200614103329_CreateDataSchema.cs" />
+    <Compile Remove="Migrations\20200614103329_CreateDataSchema.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
