@@ -1,10 +1,55 @@
 ﻿@page
 @model IndexModel
+
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "RealTournament";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Upcoming tournaments</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Tournament[0].Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tournament[0].Discipline)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tournament[0].Time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tournament[0].ApplicationDeadline)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tournament[0].MaxParticipants)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Tournament) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discipline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationDeadline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxParticipants)
+            </td>
+            <td>
+                <a asp-page="./Tournaments/Details" asp-route-id="@item.Id">Details</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

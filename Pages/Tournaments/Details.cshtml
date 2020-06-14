@@ -1,0 +1,53 @@
+﻿@page
+@using RealTournament.Areas.Identity.Data
+@model RealTournament.Pages.Tournaments.DetailsModel
+@inject UserManager<RealTournamentUser> UserManager
+
+@{
+    ViewData["Title"] = Html.DisplayFor(model => model.Tournament.Name);
+}
+
+<h1>@Html.DisplayFor(model => model.Tournament.Name)</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tournament.Discipline)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tournament.Discipline)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Organizer)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Organizer)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tournament.Time)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tournament.Time)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tournament.ApplicationDeadline)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tournament.ApplicationDeadline)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tournament.MaxParticipants)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Tournament.MaxParticipants)
+        </dd>
+    </dl>
+</div>
+@if (UserManager.GetUserId(User) == Model.Tournament.Organizer)
+{
+    <div>
+        <a asp-page="./Edit" asp-route-id="@Model.Tournament.Id">Edit</a>
+        <a asp-page="./Delete" asp-route-id="@Model.Tournament.Id">Delete</a>
+    </div>
+}
