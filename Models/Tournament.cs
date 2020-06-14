@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using RealTournament.Utility;
 
 namespace RealTournament.Models
 {
@@ -13,6 +14,7 @@ namespace RealTournament.Models
         public string Discipline { get; set; }
         public string Organizer { get; set; }
         [Required]
+        [InFuture(ErrorMessage = "You can't host tournaments in the past")]
         [DisplayFormat(DataFormatString = "{0:g}")]
         public DateTime Time { get; set; }
         [Required]
