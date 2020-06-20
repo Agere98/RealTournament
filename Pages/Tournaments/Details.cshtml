@@ -44,10 +44,14 @@
         </dd>
     </dl>
 </div>
-@if (UserManager.GetUserId(User) == Model.Tournament.Organizer)
-{
-    <div>
-        <a asp-page="./Edit" asp-route-id="@Model.Tournament.Id">Edit</a>
-        <a asp-page="./Delete" asp-route-id="@Model.Tournament.Id">Delete</a>
-    </div>
-}
+<div>
+    @if (Model.CanApply)
+    {
+        <a asp-page="./Apply" asp-route-id="@Model.Tournament.Id" class="btn btn-primary">Apply</a>
+    }
+    @if (UserManager.GetUserId(User) == Model.Tournament.Organizer)
+    {
+        <a asp-page="./Edit" asp-route-id="@Model.Tournament.Id" class="btn btn-primary">Edit</a>
+        <a asp-page="./Delete" asp-route-id="@Model.Tournament.Id" class="btn btn-primary">Delete</a>
+    }
+</div>
