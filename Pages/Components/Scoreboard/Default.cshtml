@@ -13,7 +13,7 @@
 @foreach (var participant in Model)
 {
     <button style="border: none; margin: 0; padding: 0; outline: none; background-color: transparent; width: 100%" type="button"
-            data-toggle="collapse" data-target="#gamesSummary" aria-expanded="false" aria-controls="gamesSummary">
+            data-toggle="collapse" data-target="#R-@participant.Rank" aria-expanded="false" aria-controls="R-@participant.Rank">
         <table class="table" style="text-align: left">
             <tr>
                 <td style="width: 10%">@participant.Rank</td>
@@ -23,7 +23,7 @@
             </tr>
         </table>
     </button>
-    <div class="collapse" id="gamesSummary">
+    <div class="collapse" id="R-@participant.Rank">
         <div class="card card-body">
             <h4>Games played</h4>
             <table class="table">

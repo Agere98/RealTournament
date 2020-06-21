@@ -55,6 +55,13 @@ namespace RealTournament.ViewComponents
                     results.GamesPlayed++;
                     if (game.FirstPlayerWin.Value) results.Score++;
                 }
+                foreach (var game in participant.GamesAsSecond)
+                {
+                    if (game.FirstPlayerWin == null || !game.FirstPlayerWin != game.SecondPlayerWin) continue;
+                    results.GameResults.Add((await GetParticipantName(game.FirstPlayerId), game.SecondPlayerWin.Value));
+                    results.GamesPlayed++;
+                    if (game.SecondPlayerWin.Value) results.Score++;
+                }
                 scoreboard.Add(results);
             }
             scoreboard.Sort((first, second) =>
