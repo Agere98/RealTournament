@@ -55,3 +55,11 @@
         <a asp-page="./Delete" asp-route-id="@Model.Tournament.Id" class="btn btn-primary">Delete</a>
     }
 </div>
+@if (Model.Tournament.Time <= DateTime.Now)
+{
+    <hr />
+    <div>
+        <h2>Scoreboard</h2>
+        @await Component.InvokeAsync("Scoreboard", new { Model.Tournament })
+    </div>
+}

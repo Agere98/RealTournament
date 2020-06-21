@@ -1,0 +1,58 @@
+﻿@model List<RealTournament.ViewComponents.ScoreboardViewComponent.PlayerResultsModel>
+
+<table class="table" style="text-align: left">
+    <thead>
+        <tr>
+            <td style="width: 10%">Rank</td>
+            <td style="width: 60%">Name</td>
+            <td style="width: 20%">Games played</td>
+            <td style="width: 10%">Score</td>
+        </tr>
+    </thead>
+</table>
+@foreach (var participant in Model)
+{
+    <button style="border: none; margin: 0; padding: 0; outline: none; background-color: transparent; width: 100%" type="button"
+            data-toggle="collapse" data-target="#gamesSummary" aria-expanded="false" aria-controls="gamesSummary">
+        <table class="table" style="text-align: left">
+            <tr>
+                <td style="width: 10%">@participant.Rank</td>
+                <td style="width: 60%">@participant.PlayerName</td>
+                <td style="width: 20%">@participant.GamesPlayed</td>
+                <td style="width: 10%">@participant.Score</td>
+            </tr>
+        </table>
+    </button>
+    <div class="collapse" id="gamesSummary">
+        <div class="card card-body">
+            <h4>Games played</h4>
+            <table class="table">
+                @{
+                    const string resultColumnStyle = "width: 15%; text-align: center;";
+                }
+                <thead>
+                    <tr>
+                        <td>Opponent</td>
+                        <td style="@resultColumnStyle">Result</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var (opponent, win) in participant.GameResults)
+                    {
+                        <tr>
+                            <td>@opponent</td>
+                            @if (win)
+                            {
+                                <td class="text-success" style="@resultColumnStyle">Win</td>
+                            }
+                            else
+                            {
+                                <td class="text-danger" style="@resultColumnStyle">Lose</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
