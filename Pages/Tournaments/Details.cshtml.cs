@@ -29,6 +29,7 @@ namespace RealTournament.Pages.Tournaments
 
         public Tournament Tournament { get; set; }
         public string Organizer { get; set; }
+        public int Participants { get; set; }
         public bool CanApply { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -55,9 +56,18 @@ namespace RealTournament.Pages.Tournaments
 
             Organizer = organizer.Name;
 
+            Participants = await _context.Participant
+                .Where(p => p.TournamentId == Tournament.Id)
+                .CountAsync();
+
             CanApply = !(await _context.Participant
                 .Where(p => p.TournamentId == id && p.UserId == _userManager.GetUserId(User))
                 .AnyAsync());
+
+            if (Participants >= Tournament.MaxParticipants || Tournament.Time <= DateTime.Now)
+            {
+                CanApply = false;
+            }
 
             if (Tournament.Time <= DateTime.Now && !Tournament.Ongoing)
             {

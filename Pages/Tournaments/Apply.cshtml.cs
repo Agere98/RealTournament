@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,11 @@ namespace RealTournament.Pages.Tournaments
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!(await CanApply(TournamentId)))
+            {
+                return RedirectToPage("./Details", new { id = TournamentId });
+            }
+
             var participant = new Participant()
             {
                 TournamentId = TournamentId,
@@ -70,6 +76,18 @@ namespace RealTournament.Pages.Tournaments
             }
 
             return RedirectToPage("./Details", new { id = TournamentId });
+        }
+
+        private async Task<bool> CanApply(int tournamentId)
+        {
+            var maxParticipants = await _context.Tournament
+                .Where(t => t.Id == tournamentId)
+                .Select(t => t.MaxParticipants)
+                .FirstOrDefaultAsync();
+            var participants = await _context.Participant
+                .Where(p => p.TournamentId == tournamentId)
+                .CountAsync();
+            return participants < maxParticipants;
         }
     }
 }
