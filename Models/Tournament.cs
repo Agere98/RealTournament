@@ -22,7 +22,7 @@ namespace RealTournament.Models
         [DisplayFormat(DataFormatString = "{0:g}")]
         public DateTime ApplicationDeadline { get; set; }
         [Required]
-        [Range(2, int.MaxValue)]
+        [Range(2, 25)]
         [Display(Name = "Max number of participants")]
         public int MaxParticipants { get; set; }
 
