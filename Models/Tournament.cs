@@ -25,6 +25,7 @@ namespace RealTournament.Models
         [Range(2, 25)]
         [Display(Name = "Max number of participants")]
         public int MaxParticipants { get; set; }
+        public bool Ongoing { get; set; }
 
         public List<Participant> Participants { get; set; }
         public List<Game> Games { get; set; }

@@ -1,0 +1,51 @@
+﻿@page
+@model RealTournament.Pages.MyTournamentsModel
+@{
+    ViewData["Title"] = "My tournaments";
+}
+
+<h1>Upcoming games</h1>
+
+<partial name="_StatusMessage" model="ViewBag.errMsg" />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tournament
+            </th>
+            <th>
+                Opponent
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var (game, opponent) in Model.UpcomingGames)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => game.Tournament.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => opponent)
+                </td>
+                <td>
+                    @if (game.FirstPlayerId == Model.UserId && game.FirstPlayerWin == null
+                   || game.SecondPlayerId == Model.UserId && game.SecondPlayerWin == null)
+                    {
+                        <form method="post">
+                            <input type="hidden" asp-for="GameId" value="@game.Id" />
+                            <input class="btn btn-outline-success" type="submit" asp-page-handler="Win" value="Declare as won" />
+                            <input class="btn btn-outline-danger" type="submit" asp-page-handler="Lose" value="Declare as lost" />
+                        </form>
+                    }
+                    else
+                    {
+                        @:Waiting for opponent...
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RealTournament.Areas.Identity.Data;
 using RealTournament.Data;
 using RealTournament.Models;
+using RealTournament.Services;
 
 namespace RealTournament.Pages.Tournaments
 {
@@ -15,6 +17,8 @@ namespace RealTournament.Pages.Tournaments
         private readonly RealTournamentContext _context;
         private readonly IdentityContext _identity;
         private readonly UserManager<RealTournamentUser> _userManager;
+
+        private static readonly object Locker = new object();
 
         public DetailsModel(RealTournamentContext context, IdentityContext identity, UserManager<RealTournamentUser> userManager)
         {
@@ -34,7 +38,8 @@ namespace RealTournament.Pages.Tournaments
                 return NotFound();
             }
 
-            Tournament = await _context.Tournament.FirstOrDefaultAsync(m => m.Id == id);
+            Tournament = await _context.Tournament
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (Tournament == null)
             {
                 return NotFound();
@@ -53,6 +58,27 @@ namespace RealTournament.Pages.Tournaments
             CanApply = !(await _context.Participant
                 .Where(p => p.TournamentId == id && p.UserId == _userManager.GetUserId(User))
                 .AnyAsync());
+
+            if (Tournament.Time <= DateTime.Now && !Tournament.Ongoing)
+            {
+                Task matchmaking = null;
+                lock (Locker)
+                {
+                    var check = _context.Tournament
+                        .Where(t => t.Id == Tournament.Id)
+                        .Select(t => t.Ongoing)
+                        .First();
+                    if (!check)
+                    {
+                        Tournament.Ongoing = true;
+                        _context.SaveChanges();
+                        var matchmaker = new Matchmaker(_context, Tournament);
+                        matchmaking = matchmaker.LaunchTournament();
+                    }
+                }
+
+                if (matchmaking != null) await matchmaking;
+            }
 
             return Page();
         }
