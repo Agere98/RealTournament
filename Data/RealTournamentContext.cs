@@ -32,9 +32,9 @@ namespace RealTournament.Data
             modelBuilder.Entity<Participant>(entity =>
             {
                 entity.HasKey(e => new { e.TournamentId, e.UserId });
-                entity.HasIndex(e => e.LicenseNumber)
+                entity.HasIndex(e => new { e.TournamentId, e.LicenseNumber })
                     .IsUnique();
-                entity.HasIndex(e => e.Ranking)
+                entity.HasIndex(e => new { e.TournamentId, e.Ranking })
                     .IsUnique();
                 entity.Property(e => e.LicenseNumber).IsRequired();
             });
