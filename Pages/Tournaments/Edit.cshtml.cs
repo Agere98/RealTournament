@@ -80,6 +80,11 @@ namespace RealTournament.Pages.Tournaments
                     throw;
                 }
             }
+            catch (DbUpdateException)
+            {
+                ViewData["errMsg"] = "Invalid tournament data";
+                return await OnGetAsync(Tournament.Id);
+            }
 
             return RedirectToPage("./Details", new { id = Tournament.Id });
         }

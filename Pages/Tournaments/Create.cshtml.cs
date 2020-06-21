@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using RealTournament.Areas.Identity.Data;
 using RealTournament.Data;
 using RealTournament.Models;
@@ -37,8 +38,16 @@ namespace RealTournament.Pages.Tournaments
                 return Page();
             }
 
-            await _context.Tournament.AddAsync(Tournament);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Tournament.AddAsync(Tournament);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                ViewData["errMsg"] = "Invalid tournament data";
+                return OnGet();
+            }
 
             return RedirectToPage("./Details", new { id = Tournament.Id });
         }
