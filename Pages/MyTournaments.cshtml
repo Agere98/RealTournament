@@ -32,7 +32,7 @@
                 </td>
                 <td>
                     @if (game.FirstPlayerId == Model.UserId && game.FirstPlayerWin == null
-                   || game.SecondPlayerId == Model.UserId && game.SecondPlayerWin == null)
+                  || game.SecondPlayerId == Model.UserId && game.SecondPlayerWin == null)
                     {
                         <form method="post">
                             <input type="hidden" asp-for="GameId" value="@game.Id" />
@@ -44,6 +44,44 @@
                     {
                         @:Waiting for opponent...
                     }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h1>My tournaments</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ActiveTournaments[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActiveTournaments[0].Discipline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActiveTournaments[0].Time)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ActiveTournaments)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discipline)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+                <td>
+                    <a asp-page="./Tournaments/Details" asp-route-id="@item.Id">Details</a>
                 </td>
             </tr>
         }

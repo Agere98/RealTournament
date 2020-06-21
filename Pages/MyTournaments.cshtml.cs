@@ -30,6 +30,7 @@ namespace RealTournament.Pages
 
         public string UserId { get; set; }
         public IList<(Game game, string opponent)> UpcomingGames { get; set; }
+        public IList<Tournament> ActiveTournaments { get; set; }
 
         [BindProperty]
         public int GameId { get; set; }
@@ -53,6 +54,14 @@ namespace RealTournament.Pages
                     .FirstOrDefaultAsync();
                 UpcomingGames.Add((game, opponent));
             }
+
+            ActiveTournaments = await _context.Participant
+                .Where(p => p.UserId == UserId)
+                .Include(p => p.Tournament)
+                .Select(p => p.Tournament)
+                .Union(_context.Tournament.Where(t => t.Organizer == UserId))
+                .OrderByDescending(t => t.Time)
+                .ToListAsync();
 
             if (err == "NotConsistent")
             {
