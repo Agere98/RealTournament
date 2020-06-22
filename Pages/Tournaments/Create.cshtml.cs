@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +32,12 @@ namespace RealTournament.Pages.Tournaments
         [BindProperty]
         public Tournament Tournament { get; set; }
 
+        [BindProperty]
+        [Display(Name = "Sponsor logo URLs")]
+        public List<string> SponsorLogoUrls { get; set; } = new List<string>();
+        [BindProperty]
+        public string NewLogo { get; set; }
+
         public async Task<IActionResult> OnPostAsync()
         {
             Tournament.Organizer = _userManager.GetUserId(User);
@@ -40,7 +48,15 @@ namespace RealTournament.Pages.Tournaments
 
             try
             {
-                await _context.Tournament.AddAsync(Tournament);
+                var tournament = (await _context.Tournament.AddAsync(Tournament)).Entity;
+                foreach (var url in SponsorLogoUrls)
+                {
+                    await _context.Sponsor.AddAsync(new Sponsor
+                    {
+                        LogoUrl = url,
+                        TournamentId = tournament.Id
+                    });
+                }
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
@@ -50,6 +66,26 @@ namespace RealTournament.Pages.Tournaments
             }
 
             return RedirectToPage("./Details", new { id = Tournament.Id });
+        }
+
+        public IActionResult OnPostAddLogo()
+        {
+            if (!string.IsNullOrEmpty(NewLogo))
+            {
+                SponsorLogoUrls.Add(NewLogo);
+                NewLogo = "";
+            }
+            return Page();
+        }
+
+        public IActionResult OnPostRemoveLogo(string remove)
+        {
+            if (!string.IsNullOrEmpty(NewLogo) && int.TryParse(remove, out var i))
+            {
+                SponsorLogoUrls.RemoveAt(i);
+            }
+
+            return Page();
         }
     }
 }

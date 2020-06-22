@@ -38,6 +38,29 @@
                 <input asp-for="Tournament.MaxParticipants" class="form-control" />
                 <span asp-validation-for="Tournament.MaxParticipants" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="SponsorLogoUrls" class="control-label"></label>
+                @for (var i = 0; i < Model.SponsorLogoUrls.Count; i++)
+                {
+                    <div class="form-row">
+                        <img src="@Model.SponsorLogoUrls[i]" class="col-4" alt="@Model.SponsorLogoUrls[i]" />
+                        <input type="hidden" asp-for="SponsorLogoUrls[i]" value="@Model.SponsorLogoUrls[i]" />
+                        <button type="submit" asp-page-handler="RemoveLogo" name="remove" value="@i"
+                                class="btn btn-outline-danger mb-2" formnovalidate>
+                            Remove
+                        </button>
+                    </div>
+                }
+                <div class="form-row">
+                    <div class="col-auto">
+                        <input asp-for="NewLogo" class="form-control" />
+                    </div>
+                    <div class="col-auto">
+                        <input type="submit" asp-page-handler="AddLogo" value="Add"
+                               class="btn btn-outline-primary mb-2" formnovalidate />
+                    </div>
+                </div>
+            </div>
             @if (ViewBag.errMsg != null)
             {
                 <div class="form-group">
@@ -45,7 +68,7 @@
                 </div>
             }
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" asp-page-handler="" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

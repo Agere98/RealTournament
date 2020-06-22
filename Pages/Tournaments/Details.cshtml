@@ -43,6 +43,14 @@
             @Model.Participants / @Html.DisplayFor(model => model.Tournament.MaxParticipants)
         </dd>
     </dl>
+    <div class="row">
+        @foreach (var url in Model.SponsorLogoUrls)
+        {
+            <div class="col-3">
+                <img src="@url" style="width: 100%; height: auto" alt="@url" />
+            </div>
+        }
+    </div>
 </div>
 <div>
     @if (Model.CanApply)

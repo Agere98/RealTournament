@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -29,6 +30,7 @@ namespace RealTournament.Pages.Tournaments
 
         public Tournament Tournament { get; set; }
         public string Organizer { get; set; }
+        public List<string> SponsorLogoUrls { get; set; }
         public int Participants { get; set; }
         public bool CanApply { get; set; }
 
@@ -55,6 +57,11 @@ namespace RealTournament.Pages.Tournaments
             }
 
             Organizer = organizer.Name;
+
+            SponsorLogoUrls = await _context.Sponsor
+                .Where(s => s.TournamentId == Tournament.Id)
+                .Select(s => s.LogoUrl)
+                .ToListAsync();
 
             Participants = await _context.Participant
                 .Where(p => p.TournamentId == Tournament.Id)

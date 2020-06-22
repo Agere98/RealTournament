@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealTournament.Data;
 
 namespace RealTournament.Migrations
 {
     [DbContext(typeof(RealTournamentContext))]
-    partial class RealTournamentContextModelSnapshot : ModelSnapshot
+    [Migration("20200622000315_CreateSponsorModel")]
+    partial class CreateSponsorModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

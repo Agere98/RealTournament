@@ -17,6 +17,7 @@ namespace RealTournament.Data
         public virtual DbSet<Tournament> Tournament { get; set; }
         public virtual DbSet<Participant> Participant { get; set; }
         public virtual DbSet<Game> Game { get; set; }
+        public virtual DbSet<Sponsor> Sponsor { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

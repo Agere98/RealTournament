@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +28,12 @@ namespace RealTournament.Pages.Tournaments
         [BindProperty]
         public Tournament Tournament { get; set; }
 
+        [BindProperty]
+        [Display(Name = "Sponsor logo URLs")]
+        public List<string> SponsorLogoUrls { get; set; }
+        [BindProperty]
+        public string NewLogo { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -45,6 +53,15 @@ namespace RealTournament.Pages.Tournaments
             {
                 return Unauthorized();
             }
+
+            if (SponsorLogoUrls == null)
+            {
+                SponsorLogoUrls = await _context.Sponsor
+                    .Where(s => s.TournamentId == Tournament.Id)
+                    .Select(s => s.LogoUrl)
+                    .ToListAsync();
+            }
+
             return Page();
         }
 
@@ -67,6 +84,16 @@ namespace RealTournament.Pages.Tournaments
 
             try
             {
+                _context.RemoveRange(_context.Sponsor
+                    .Where(s => s.TournamentId == Tournament.Id));
+                foreach (var url in SponsorLogoUrls)
+                {
+                    await _context.Sponsor.AddAsync(new Sponsor
+                    {
+                        LogoUrl = url,
+                        TournamentId = Tournament.Id
+                    });
+                }
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -87,6 +114,27 @@ namespace RealTournament.Pages.Tournaments
             }
 
             return RedirectToPage("./Details", new { id = Tournament.Id });
+        }
+
+        public IActionResult OnPostAddLogo()
+        {
+            if (!string.IsNullOrEmpty(NewLogo))
+            {
+                SponsorLogoUrls.Add(NewLogo);
+                NewLogo = "";
+            }
+
+            return Page();
+        }
+
+        public IActionResult OnPostRemoveLogo(string remove)
+        {
+            if (!string.IsNullOrEmpty(NewLogo) && int.TryParse(remove, out var i))
+            {
+                SponsorLogoUrls.RemoveAt(i);
+            }
+
+            return Page();
         }
 
         private bool TournamentExists(int id)
