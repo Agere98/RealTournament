@@ -12,6 +12,8 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Tournament.Latitude" value="52,40359" id="Lat" />
+            <input type="hidden" asp-for="Tournament.Longitude" value="16,95006" id="Long" />
             <div class="form-group">
                 <label asp-for="Tournament.Name" class="control-label"></label>
                 <input asp-for="Tournament.Name" class="form-control" />
@@ -71,8 +73,20 @@
             </div>
         </form>
     </div>
+    <div class="col-md-8">
+        <div class="form-group">
+            <label class="control-label">Location</label>
+            <div id="mapContainer" style="width: 100%; height: 420px"></div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_MapScriptsPartial");}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            DisplayGoogleMap($("#mapContainer"), $("#Lat"), $("#Long"));
+        });
+    </script>
 }

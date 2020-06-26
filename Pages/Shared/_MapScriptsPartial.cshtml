@@ -1,0 +1,27 @@
+﻿<script type="text/javascript">
+    function DisplayGoogleMap(container, latitude, longitude) {
+        var lat = parseFloat((latitude instanceof jQuery ? latitude.val() : latitude).replace(",", "."));
+        var long = parseFloat((longitude instanceof jQuery ? longitude.val() : longitude).replace(",", "."));
+        var markerPosition = new google.maps.LatLng(lat, long);
+        var mapOptions = {
+            center: markerPosition,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(container[0], mapOptions);
+        var draggableMarker = latitude instanceof jQuery && longitude instanceof jQuery;
+        var marker = new google.maps.Marker({
+            position: markerPosition,
+            draggable: draggableMarker
+        });
+        marker.setMap(map);
+        if (draggableMarker) {
+            google.maps.event.addListener(marker, "dragend", function () {
+                var lat = marker.getPosition().lat();
+                var long = marker.getPosition().lng();
+                latitude.val(lat.toString(10).replace(".", ","));
+                longitude.val(long.toString(10).replace(".", ","));
+            });
+        }
+    }
+</script>

@@ -43,7 +43,12 @@
             @Model.Participants / @Html.DisplayFor(model => model.Tournament.MaxParticipants)
         </dd>
     </dl>
-    <div class="row">
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-sm-8">
+            <div id="mapContainer" style="width: 100%; height: 420px"></div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
         @foreach (var url in Model.SponsorLogoUrls)
         {
             <div class="col-3">
@@ -70,4 +75,13 @@
         <h2>Scoreboard</h2>
         @await Component.InvokeAsync("Scoreboard", new { Model.Tournament })
     </div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_MapScriptsPartial");}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            DisplayGoogleMap($("#mapContainer"), "@Model.Tournament.Latitude", "@Model.Tournament.Longitude");
+        });
+    </script>
 }
