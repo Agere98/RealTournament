@@ -71,7 +71,7 @@ namespace RealTournament.Pages.Tournaments
                 .Where(p => p.TournamentId == id && p.UserId == _userManager.GetUserId(User))
                 .AnyAsync());
 
-            if (Participants >= Tournament.MaxParticipants || Tournament.Time <= DateTime.Now)
+            if (Participants >= Tournament.MaxParticipants || Tournament.ApplicationDeadline <= DateTime.Now)
             {
                 CanApply = false;
             }

@@ -26,6 +26,11 @@ namespace RealTournament.Pages.Tournaments
 
         public IActionResult OnGet()
         {
+            Tournament = new Tournament
+            {
+                Latitude = 52.40359f,
+                Longitude = 16.95006f
+            };
             return Page();
         }
 
@@ -48,13 +53,13 @@ namespace RealTournament.Pages.Tournaments
 
             try
             {
-                var tournament = (await _context.Tournament.AddAsync(Tournament)).Entity;
+                await _context.Tournament.AddAsync(Tournament);
                 foreach (var url in SponsorLogoUrls)
                 {
                     await _context.Sponsor.AddAsync(new Sponsor
                     {
                         LogoUrl = url,
-                        TournamentId = tournament.Id
+                        Tournament = Tournament
                     });
                 }
                 await _context.SaveChangesAsync();

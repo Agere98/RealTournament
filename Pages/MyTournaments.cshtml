@@ -25,14 +25,16 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => game.Tournament.Name)
+                    <a asp-page="./Tournaments/Details" asp-route-id="@game.TournamentId">
+                        @Html.DisplayFor(modelItem => game.Tournament.Name)
+                    </a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => opponent)
                 </td>
                 <td>
                     @if (game.FirstPlayerId == Model.UserId && game.FirstPlayerWin == null
-                  || game.SecondPlayerId == Model.UserId && game.SecondPlayerWin == null)
+                         || game.SecondPlayerId == Model.UserId && game.SecondPlayerWin == null)
                     {
                         <form method="post">
                             <input type="hidden" asp-for="GameId" value="@game.Id" />

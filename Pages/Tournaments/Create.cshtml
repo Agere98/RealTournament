@@ -12,8 +12,8 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Tournament.Latitude" value="52,40359" id="Lat" />
-            <input type="hidden" asp-for="Tournament.Longitude" value="16,95006" id="Long" />
+            <input type="hidden" asp-for="Tournament.Latitude" id="Lat" />
+            <input type="hidden" asp-for="Tournament.Longitude" id="Long" />
             <div class="form-group">
                 <label asp-for="Tournament.Name" class="control-label"></label>
                 <input asp-for="Tournament.Name" class="form-control" />

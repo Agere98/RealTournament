@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -51,7 +52,8 @@ namespace RealTournament.Pages.Tournaments
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!(await CanApply(TournamentId)))
+            var userId = _userManager.GetUserId(User);
+            if (!(await CanApply(TournamentId, userId)))
             {
                 return RedirectToPage("./Details", new { id = TournamentId });
             }
@@ -59,7 +61,7 @@ namespace RealTournament.Pages.Tournaments
             var participant = new Participant()
             {
                 TournamentId = TournamentId,
-                UserId = _userManager.GetUserId(User),
+                UserId = userId,
                 LicenseNumber = LicenseNumber,
                 Ranking = CurrentRanking
             };
@@ -78,8 +80,10 @@ namespace RealTournament.Pages.Tournaments
             return RedirectToPage("./Details", new { id = TournamentId });
         }
 
-        private async Task<bool> CanApply(int tournamentId)
+        private async Task<bool> CanApply(int tournamentId, string userId)
         {
+            var tournament = await _context.Tournament
+                .FindAsync(tournamentId);
             var maxParticipants = await _context.Tournament
                 .Where(t => t.Id == tournamentId)
                 .Select(t => t.MaxParticipants)
@@ -87,7 +91,13 @@ namespace RealTournament.Pages.Tournaments
             var participants = await _context.Participant
                 .Where(p => p.TournamentId == tournamentId)
                 .CountAsync();
-            return participants < maxParticipants;
+            var alreadyApplied = await _context.Participant
+                .Where(p => p.TournamentId == tournamentId && p.UserId == userId)
+                .AnyAsync();
+            return tournament != null &&
+                   tournament.ApplicationDeadline > DateTime.Now &&
+                   participants < maxParticipants &&
+                   !alreadyApplied;
         }
     }
 }
